@@ -234,7 +234,8 @@ void ThinLine(SDL_Surface *scr, int x1, int y1, int x2, int y2, Uint8 col);
 void LockDoors(int r);
 
 #define SCREEN_W 640
-#define SCREEN_H 480
+//#define SCREEN_H 480
+#define SCREEN_H 240
 
 void VideoUpdate()
 {
@@ -525,7 +526,7 @@ int main(int argc, char **argv)
 			col_p = (Uint8 *)title_pr->pixels;
 			src_p = (Uint8 *)title->pixels;
 			if ((tick % 10) == 0) {
-				for (i = 0; i < 640*480; i++) {
+				for (i = 0; i < 640*240; i++) {
 					*(col_p++) = Uint8_Bound(*(src_p++)+precalc_sine[(pulse[i]+tick)%400]);
 				}
 			}
@@ -642,7 +643,7 @@ void DrawMeter(int x, int y, int n)
 
 void ProgressBarScreen(int part, float progress, char *message, float t_parts)
 {
-	memset(screen->pixels, 0, 640*480);
+	memset(screen->pixels, 0, 640*240);
 	
 	DrawRect(200, 217, 240, 50, 80);
 	DrawRect(202, 219, 236, 46, 20);
@@ -1077,9 +1078,9 @@ int DungeonPlay(char *fname)
 		
 		if (game_paused && (!map_enabled) && (!voluntary_exit)) {
 			for (i = 0; i < 10; i++) {
-				DrawRect((640 - 6 * 8) / 2 - i, (480 - 8) / 2 - i, 6*8 + 2*i, 8 + 2*i, 64 - i*5);
+				DrawRect((640 - 6 * 8) / 2 - i, (240 - 8) / 2 - i, 6*8 + 2*i, 8 + 2*i, 64 - i*5);
 			}
-			draw_text((640 - 6 * 8) / 2, (480 - 8) / 2, "Paused", 255);
+			draw_text((640 - 6 * 8) / 2, (240 - 8) / 2, "Paused", 255);
 			
 			{
 				int t_days;
@@ -1108,8 +1109,8 @@ int DungeonPlay(char *fname)
 		if (voluntary_exit) {
 			DrawRect(152, 200, 336, 80, 128);
 			DrawRect(160, 208, 320, 64, 64);
-			draw_text((640 - 30 * 8) / 2, (480 - 8) / 2 - 4, "Are you sure you want to quit?", 255);
-			draw_text((640 - 23 * 8) / 2, (480 - 8) / 2 + 4, "Press enter to confirm.", 255);
+			draw_text((640 - 30 * 8) / 2, (240 - 8) / 2 - 4, "Are you sure you want to quit?", 255);
+			draw_text((640 - 23 * 8) / 2, (240 - 8) / 2 + 4, "Press enter to confirm.", 255);
 		}
 		
 		VideoUpdate();
@@ -1480,7 +1481,7 @@ void DrawLevel(int off_x, int off_y, int hide_not_visited, int fog_of_war)
 	int x, y, i;
 	int resolve_x, resolve_y;
 	
-	DrawRect(0, 0, 640, 480, 255);
+	DrawRect(0, 0, 640, 240, 255);
 	
 	if (tiles == NULL) {
 		tiles = IMG_Load("dat/i/tileset.png");
