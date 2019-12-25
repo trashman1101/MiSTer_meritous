@@ -10,24 +10,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SCUMMVM_CPU_MASK=03
-SCUMMVM_EXE_NAME="scummvm22"
-SCUMMVM_HOME_DIR="/media/fat/ScummVM"
-SCUMMVM_OPTIONS="--opl-driver=db --output-rate=48000"
-SCUMMVM_LIB_PATH="$SCUMMVM_HOME_DIR/arm-linux-gnueabihf:$SCUMMVM_HOME_DIR/arm-linux-gnueabihf/pulseaudio"
+meritous_CPU_MASK=03
+meritous_EXE_NAME="meritous"
+meritous_HOME_DIR="/media/fat/meritous"
+#meritous_OPTIONS="--opl-driver=db --output-rate=48000"
+meritous_LIB_PATH="$meritous_HOME_DIR/arm-linux-gnueabihf:$meritous_HOME_DIR/arm-linux-gnueabihf/pulseaudio"
 
 echo "Setting Video mode..."
 vmode -r 640 480 rgb16
 
 echo "Setting library path..."
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SCUMMVM_LIB_PATH"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$meritous_LIB_PATH"
 echo $LD_LIBRARY_PATH
-echo "Setting ScummVM HOME path..."
-export HOME="$SCUMMVM_HOME_DIR"
+echo "Setting meritous HOME path..."
+export HOME="$meritous_HOME_DIR"
 
-cd $SCUMMVM_HOME_DIR
-echo "Starting ScummVM..."
-taskset $SCUMMVM_CPU_MASK $SCUMMVM_HOME_DIR/$SCUMMVM_EXE_NAME $SCUMMVM_OPTIONS 
+cd $meritous_HOME_DIR
+echo "Starting meritous..."
+taskset $meritous_CPU_MASK $meritous_HOME_DIR/$meritous_EXE_NAME #$meritous_OPTIONS 
 
 
 
