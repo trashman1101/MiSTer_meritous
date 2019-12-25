@@ -17,7 +17,7 @@ meritous_HOME_DIR="/media/fat/meritous"
 meritous_LIB_PATH="$meritous_HOME_DIR/arm-linux-gnueabihf:$meritous_HOME_DIR/arm-linux-gnueabihf/pulseaudio"
 
 echo "Setting Video mode..."
-vmode -r 640 480 rgb16
+vmode -r 640 240 rgb16
 
 echo "Setting library path..."
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$meritous_LIB_PATH"

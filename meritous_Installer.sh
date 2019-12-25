@@ -17,47 +17,18 @@
 # Alessandro "Locutus73" Miele
 #------------------------------------------------------------------------------
 
-#------------------------------------------------------------------------------
-# get the name of the script, or of the parent script if called through a 'curl ... | bash -'
-ORIGINAL_SCRIPT_PATH="${0}"
-[[ "${ORIGINAL_SCRIPT_PATH}" == "bash" ]] && \
-	ORIGINAL_SCRIPT_PATH="$(ps -o comm,pid | awk -v PPID=${PPID} '$2 == PPID {print $1}')"
-
-# ini file can contain user defined variables (as bash commands)
-# Load and execute the content of the ini file, if there is one
-INI_PATH="${ORIGINAL_SCRIPT_PATH%.*}.ini"
-if [[ -f "${INI_PATH}" ]] ; then
-	echo "$INI_PATH found :)"
-	TMP=$(mktemp)
-	# preventively eliminate DOS-specific format and exit command  
-	dos2unix < "${INI_PATH}" 2> /dev/null | grep -v "^exit" > ${TMP}
-	source ${TMP}
-	rm -f ${TMP}
-else
-	echo "$INI_PATH not found..."
-fi
-
-#------------------------------------------------------------------------------
-if [ -z "$ALLOW_INSECURE_SSL" ];          then ALLOW_INSECURE_SSL="TRUE"; fi
-if [ -z "$INSTALL_DIR" ];                 then INSTALL_DIR="/media/fat/ScummVM"; fi
-if [ -z "$SCRIPTS_DIR" ];                 then SCRIPTS_DIR="/media/fat/Scripts"; fi
-if [ -z "$GITHUB_REPO" ];                 then GITHUB_REPO="https://github.com/trashman1101/MiSTer_meritous/raw/master"; fi
-if [ -z "$GITHUB_DEB_REPO" ];             then GITHUB_DEB_REPO="$GITHUB_REPO/DEBS"; fi
-if [ -z "$DEB_SCUMM" ];                   then DEB_SCUMMVM17="FALSE"; fi
-if [ -z "$BBOND007_SCUMMVM20" ];          then BBOND007_SCUMMVM20="FALSE"; fi
-if [ -z "$BBOND007_SCUMMVM21" ];          then BBOND007_SCUMMVM21="FALSE"; fi
-if [ -z "$BBOND007_SCUMMVM21_UNSTABLE" ]; then BBOND007_SCUMMVM21_UNSTABLE="FALSE"; fi
-if [ -z "$BBOND007_SCUMMVM22" ];          then BBOND007_SCUMMVM22="TRUE"; fi
-if [ -z "$BBOND007_SCUMMVM22_UNSTABLE" ]; then BBOND007_SCUMMVM22_UNSTABLE="FALSE"; fi
-if [ -z "$dat" ];                		  then dat="TRUE"; fi
-if [ -z "$CREATE_DIRS" ];                 then CREATE_DIRS="TRUE"; fi
-if [ -z "$DEFAULT_THEME" ];               then DEFAULT_THEME="FALSE"; fi
-if [ -z "$INTERNET_CHECK" ];              then INTERNET_CHECK="https://github.com"; fi
-if [ -z "$VERBOSE_MODE" ];                then VERBOSE_MODE="FALSE"; fi
+ALLOW_INSECURE_SSL=TRUE
+INSTALL_DIR=/media/fat/Meritous
+SCRIPTS_DIR=/media/fat/Scripts
+GITHUB_REPO=https://github.com/trashman1101/MiSTer_meritous/raw/master
+GITHUB_DEB_REPO="$GITHUB_REPO/DEBS"
+INTERNET_CHECK=https://github.com
+VERBOSE_MODE=FALSE
+FIX_MISSING_LIB_VERSION_INFO=FALSE
 
 #These options probably should not be changed...
-if [ -z "$DELETE_JUNK" ];                 then DELETE_JUNK="TRUE"; fi
-if [ -z "$DO_INSTALL" ];                  then DO_INSTALL="TRUE"; fi
+DELETE_JUNK=TRUE
+DO_INSTALL=TRUE
 
 #------------------------------------------------------------------------------
 function setupCURL
@@ -147,9 +118,9 @@ then
 	echo "Beginning Install..."
 	if [ -d "$INSTALL_DIR" ];
 	then
-		echo "ScummVM install directory found :)"
+		echo "Meritous install directory found :)"
 	else
-		echo "ScummVM install directory not found :("
+		echo "Meritous install directory not found :("
 		echo "Creating --> $INSTALL_DIR"
 		mkdir $INSTALL_DIR
 	fi
@@ -163,42 +134,44 @@ then
 		mkdir $SCRIPTS_DIR
 	fi
 	
-	if [ "$BBOND007_SCUMMVM22" = "TRUE" ];
-	then
-		echo "Downloading --> BBond007_ScummVM_2_2_0..."
-		${CURL} -L "$GITHUB_REPO/scummvm22" -o "$INSTALL_DIR/scummvm22"		
-		${CURL} -L "$GITHUB_REPO/ScummVM_2_2_0.sh" -o "$SCRIPTS_DIR/ScummVM_2_2_0.sh"
-	fi
+	echo "Downloading --> meritous.sh..."
+	${CURL} -L "$GITHUB_REPO/PrBoom-Plus_2_5_1_5.sh" -o "$SCRIPTS_DIR/meritous.sh"
 	
+	installGithubDEBS "$GITHUB_DEB_REPO|prboom-plus_2.5.1.5_svn4462+dfsg1-1+b2_armhf.deb|prboom-plus*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libasyncns0_0.8-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libbsd0_0.7.0-2_armhf.deb|lib*|2|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libcaca0_0.99.beta19-2.1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libdirectfb-1.2-9_1.2.10.0-8+deb9u1_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libfaad2_2.8.8-3_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libdumb1_0.9.3-6+b3_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libflac8_1.3.2-3_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libfluidsynth1_1.1.6-2_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libgl1_1.1.0-1_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libglu1-mesa_9.0.0-2.1_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libglvnd0_1.1.0-1_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libglx0_1.1.0-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libice6_1.0.9-2_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libjpeg62_6b2-3_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|liblz4-1_1.9.1-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libmad0_0.15.1b-8+deb9u1_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libmpeg2-4_0.5.1-8_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libogg0_1.3.2-1+b1_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libpng12-0_1.2.50-2+deb8u3_armhf.deb|lib*|2|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libmikmod3_3.3.11.1-4_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libopenal1_1.17.2-4+b2_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libpcre3_8.39-3_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libportmidi0_217-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libpulse0_10.0-1+deb9u1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libreadline6_6.3-8+b3_armhf.deb|lib*|2|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libsdl1.2debian_1.2.15-10+b1_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libsdl-image1.2_1.2.12-10_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libsdl-mixer1.2_1.2.12-15_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libsdl-net1.2_1.2.8-6_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libsdl1.2debian_1.2.15-10+b1_armhf.deb|lib*|3|$INSTALL_DIR" 
+	installGithubDEBS "$GITHUB_DEB_REPO|libsdl2-2.0-0_2.0.2+dfsg1-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libsm6_1.2.3-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libsndfile1_1.0.28-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libsndio6.1_1.1.0-3_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libsndio7.0_1.5.0-3_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libsystemd0_215-17+deb8u7_armhf.deb|lib*|2|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libtheora0_1.1.1+dfsg.1-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libtinfo5_6.1+20181013-2_armhf.deb|lib*|2|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libtinfo6_6.1+20181013-2_armhf.deb|lib*|2|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libvorbis0a_1.3.6-2_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libvorbisenc2_1.3.6-2_armhf.deb|lib*|3|$INSTALL_DIR"
-	installGithubDEBS "$GITHUB_DEB_REPO|libvorbisfile3_1.3.6-2_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libwayland-egl1_1.16.0-1_armhf.deb|lib*|3|$INSTALL_DIR"
+	installGithubDEBS "$GITHUB_DEB_REPO|libwebp6_0.6.1-2_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libwrap0_7.6.q-28_armhf.deb|lib*|2|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libx11-6_1.6.7-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libx11-xcb1_1.6.7-1_armhf.deb|lib*|3|$INSTALL_DIR"
@@ -215,58 +188,31 @@ then
 	installGithubDEBS "$GITHUB_DEB_REPO|libxss1_1.2.3-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libxtst6_1.2.3-1_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libxxf86vm1_1.1.4-1+b2_armhf.deb|lib*|3|$INSTALL_DIR"
-		
+
+	if [ "$FIX_MISSING_LIB_VERSION_INFO" = "TRUE" ];
+	then
+		installGithubDEBS "$GITHUB_DEB_REPO|libasound2_1.1.3-5_armhf.deb|lib*|3|$INSTALL_DIR"
+		installGithubDEBS "$GITHUB_DEB_REPO|libdb5.3_5.3.28-12+deb9u1_armhf.deb|lib*|3|$INSTALL_DIR"
+		installGithubDEBS "$GITHUB_DEB_REPO|libjack0_0.125.0-3_armhf.deb|lib*|3|$INSTALL_DIR"
+		installGithubDEBS "$GITHUB_DEB_REPO|libjbig0_2.1-3.1_armhf.deb|lib*|3|$INSTALL_DIR"
+		installGithubDEBS "$GITHUB_DEB_REPO|libncursesw6_6.1+20181013-2_armhf.deb|lib*|2|$INSTALL_DIR"
+		installGithubDEBS "$GITHUB_DEB_REPO|libtiff5_4.0.10-4_armhf.deb|lib*|3|$INSTALL_DIR"		
+		installGithubDEBS "$GITHUB_DEB_REPO|libzstd1_1.1.2-1_armhf.deb|lib*|3|$INSTALL_DIR"
+	fi
+
+	echo "Moving --> libpcre.so.3.13.3"
+	mv "$INSTALL_DIR/libpcre.so.3.13.3" "$INSTALL_DIR/arm-linux-gnueabihf"
+	mv "$INSTALL_DIR/libpcre.so.3" "$INSTALL_DIR/arm-linux-gnueabihf"
+
 	if [ "$DELETE_JUNK" = "TRUE" ];
 	then
 		echo "Deleting junk..."
-		for JUNK_FILE in "bug" "doc" "lib" "lintian" "menu" "share";
+		for JUNK_FILE in "bash-completion" "bug" "doc" "doc-base" "lib" "lintian"  "man" "share" "games" "applications" "icons" "libpcre.so.3*";
 		do
 			rm -rf "$INSTALL_DIR/$JUNK_FILE"
 		done
 	fi
 
-	if [ "$dat" = "TRUE" ];
-	then
-		for ENGINE_FILE in "access.dat" "cryo.dat" "drascula.dat" "hugo.dat" "kyra.dat" "lure.dat" "macventure.dat" "mort.dat" "teenagent.dat" "titanic.dat" "tony.dat" "toon.dat";
-		do
-			echo "Downloading engine data --> $ENGINE_FILE"
-			${CURL} -L "$GITHUB_REPO/engine-data/$ENGINE_FILE" -o "$INSTALL_DIR/$ENGINE_FILE"
-		done
-	fi
-	
-	if [ "$DEFAULT_THEME" = "TRUE" ];
-	then
-		echo "Downloading --> SCUMM Modern theme"
-		if [ "$BBOND007_SCUMMVM20" = "TRUE" ];
-		then
-			${CURL} -L "$GITHUB_REPO/scummmodern20.zip" -o "$INSTALL_DIR/scummmodern.zip"
-		fi
-		if [ "$BBOND007_SCUMMVM21" = "TRUE" ] || [ "$BBOND007_SCUMMVM21_UNSTABLE" = "TRUE" ];
-		then
-			${CURL} -L "$GITHUB_REPO/scummmodern21.zip" -o "$INSTALL_DIR/scummmodern.zip"
-		fi
-		if [ "$BBOND007_SCUMMVM22" = "TRUE" ] || [ "$BBOND007_SCUMMVM22_UNSTABLE" = "TRUE" ];
-		then
-			${CURL} -L "$GITHUB_REPO/scummmodern22.zip" -o "$INSTALL_DIR/scummmodern.zip"
-		fi
-	fi
-	
-	if [ "$CREATE_DIRS" = "TRUE" ];
-	then
-		echo "Creating additional directories..."
-		for NEW_DIR in "GAMES";
-		do
-			if [ -d "$INSTALL_DIR/$NEW_DIR" ];
-			then
-				echo "$INSTALL_DIR/$NEW_DIR directory found :)"
-			else
-				echo "$INSTALL_DIR/$NEW_DIR directory not found :("
-				echo "Creating --> $INSTALL_DIR/$NEW_DIR"
-				mkdir $INSTALL_DIR/$NEW_DIR
-			fi
-		done
-	fi
-	
 	echo "Done in:"
 	for i in 3 2 1;
 	do
