@@ -49,7 +49,7 @@ if [ -z "$BBOND007_SCUMMVM21" ];          then BBOND007_SCUMMVM21="FALSE"; fi
 if [ -z "$BBOND007_SCUMMVM21_UNSTABLE" ]; then BBOND007_SCUMMVM21_UNSTABLE="FALSE"; fi
 if [ -z "$BBOND007_SCUMMVM22" ];          then BBOND007_SCUMMVM22="TRUE"; fi
 if [ -z "$BBOND007_SCUMMVM22_UNSTABLE" ]; then BBOND007_SCUMMVM22_UNSTABLE="FALSE"; fi
-if [ -z "$ENGINE_DATA" ];                 then ENGINE_DATA="TRUE"; fi
+if [ -z "$dat" ];                		  then dat="TRUE"; fi
 if [ -z "$CREATE_DIRS" ];                 then CREATE_DIRS="TRUE"; fi
 if [ -z "$DEFAULT_THEME" ];               then DEFAULT_THEME="FALSE"; fi
 if [ -z "$INTERNET_CHECK" ];              then INTERNET_CHECK="https://github.com"; fi
@@ -225,7 +225,7 @@ then
 		done
 	fi
 
-	if [ "$ENGINE_DATA" = "TRUE" ];
+	if [ "$dat" = "TRUE" ];
 	then
 		for ENGINE_FILE in "access.dat" "cryo.dat" "drascula.dat" "hugo.dat" "kyra.dat" "lure.dat" "macventure.dat" "mort.dat" "teenagent.dat" "titanic.dat" "tony.dat" "toon.dat";
 		do
