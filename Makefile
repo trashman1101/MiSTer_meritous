@@ -22,7 +22,7 @@ LDFLAGS = `sdl-config --libs` -lSDL_image -lSDL_mixer -lz -lm
 CCFLAGS = -O2 -Wall `sdl-config --cflags` -g 
 #
 OBJS = 	src/levelblit.o \
-		src/mapgen.o \
+# 		src/mapgen.o \
 		src/demon.o \
 		src/gamemap.o \
 		src/tiles.o \

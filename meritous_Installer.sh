@@ -136,9 +136,11 @@ then
 	fi
 	
 	echo "Downloading --> meritous.sh"
-	${CURL} -L "$GITHUB_REPO/meritous.sh" -o "$SCRIPTS_DIR/meritous.sh"
+	${CURL} -L "$GITHUB_REPO/meritous480p.sh" -o "$SCRIPTS_DIR/meritous480p.sh"
+	${CURL} -L "$GITHUB_REPO/meritous240p.sh" -o "$SCRIPTS_DIR/meritous240p.sh"
 	echo "Downloading --> meritous..."
-		${CURL} -L "$GITHUB_REPO/meritous" -o "$INSTALL_DIR/meritous"
+		${CURL} -L "$GITHUB_REPO/meritous480p" -o "$INSTALL_DIR/meritous480p"
+		${CURL} -L "$GITHUB_REPO/meritous240p" -o "$INSTALL_DIR/meritous240p"
 	
 	installGithubDEBS "$GITHUB_DEB_REPO|libasyncns0_0.8-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libbsd0_0.7.0-2_armhf.deb|lib*|2|$INSTALL_DIR"
