@@ -12,7 +12,7 @@
 
 meritous_CPU_MASK=03
 meritous_HOME_DIR="/media/fat/meritous"
-meritous_EXE_NAME="meritous"
+meritous_EXE_NAME="meritous240p"
 meritous_OPTIONS=""
 meritous_LIB_PATH="$meritous_HOME_DIR/arm-linux-gnueabihf:$meritous_HOME_DIR/arm-linux-gnueabihf/pulseaudio"
 
