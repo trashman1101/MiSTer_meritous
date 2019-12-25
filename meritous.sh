@@ -11,23 +11,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 meritous_CPU_MASK=03
-meritous_EXE_NAME="meritous"
 meritous_HOME_DIR="/media/fat/meritous"
-#meritous_OPTIONS="--opl-driver=db --output-rate=48000"
+meritous_EXE_NAME="meritous"
+meritous_OPTIONS=""
 meritous_LIB_PATH="$meritous_HOME_DIR/arm-linux-gnueabihf:$meritous_HOME_DIR/arm-linux-gnueabihf/pulseaudio"
 
 echo "Setting Video mode..."
-vmode -r 640 240 rgb16
+vmode -r 640 240 idx8
 
 echo "Setting library path..."
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$meritous_LIB_PATH"
 echo $LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$meritous_LIB_PATH"
+
 echo "Setting meritous HOME path..."
 export HOME="$meritous_HOME_DIR"
 
 cd $meritous_HOME_DIR
-echo "Starting meritous..."
-taskset $meritous_CPU_MASK $meritous_HOME_DIR/$meritous_EXE_NAME #$meritous_OPTIONS 
+echo "Starting PrBoom-Plus :)"
+taskset $meritous_CPU_MASK "$meritous_HOME_DIR/$meritous_EXE_NAME" $meritous_OPTIONS 
 
 
 

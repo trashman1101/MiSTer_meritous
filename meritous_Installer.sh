@@ -18,12 +18,13 @@
 #------------------------------------------------------------------------------
 
 ALLOW_INSECURE_SSL=TRUE
-INSTALL_DIR=/media/fat/Meritous
+INSTALL_DIR=/media/fat/meritous
 SCRIPTS_DIR=/media/fat/Scripts
 GITHUB_REPO=https://github.com/trashman1101/MiSTer_meritous/raw/master
 GITHUB_DEB_REPO="$GITHUB_REPO/DEBS"
 INTERNET_CHECK=https://github.com
 VERBOSE_MODE=FALSE
+INSTALL_MULTIPLAYER=FALSE
 FIX_MISSING_LIB_VERSION_INFO=FALSE
 
 #These options probably should not be changed...
@@ -118,9 +119,9 @@ then
 	echo "Beginning Install..."
 	if [ -d "$INSTALL_DIR" ];
 	then
-		echo "Meritous install directory found :)"
+		echo "ScummVM install directory found :)"
 	else
-		echo "Meritous install directory not found :("
+		echo "ScummVM install directory not found :("
 		echo "Creating --> $INSTALL_DIR"
 		mkdir $INSTALL_DIR
 	fi
@@ -134,10 +135,11 @@ then
 		mkdir $SCRIPTS_DIR
 	fi
 	
-	echo "Downloading --> meritous.sh..."
-	${CURL} -L "$GITHUB_REPO/PrBoom-Plus_2_5_1_5.sh" -o "$SCRIPTS_DIR/meritous.sh"
+	echo "Downloading --> meritous.sh"
+	${CURL} -L "$GITHUB_REPO/meritous.sh" -o "$SCRIPTS_DIR/meritous.sh"
+	echo "Downloading --> meritous..."
+		${CURL} -L "$GITHUB_REPO/meritous" -o "$INSTALL_DIR/meritous"
 	
-	installGithubDEBS "$GITHUB_DEB_REPO|prboom-plus_2.5.1.5_svn4462+dfsg1-1+b2_armhf.deb|prboom-plus*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libasyncns0_0.8-6_armhf.deb|lib*|3|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libbsd0_0.7.0-2_armhf.deb|lib*|2|$INSTALL_DIR"
 	installGithubDEBS "$GITHUB_DEB_REPO|libcaca0_0.99.beta19-2.1_armhf.deb|lib*|3|$INSTALL_DIR"
@@ -220,4 +222,3 @@ then
 		sleep 1
 	done
 fi
-
