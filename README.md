@@ -1,5 +1,5 @@
 # MiSTer_Meritous
-ScummVM installer and 2.2.0 build for the MiSTer platform.
+Meritous installer for the MiSTer platform.
 
 Install instructions:
      
